@@ -54,7 +54,10 @@ function FillRes() {
         }
         insertNumber(resources.wood, wood);
         insertNumber(resources.stone, clay);
-        insertNumber(resources.iron, iron)
+        insertNumber(resources.iron, iron);
+    }
+    function insertNumber(x,y) {
+        x.value = y;
     }
     if (wood + clay + iron > 0) {
         window.addEventListener("unload", function() {
