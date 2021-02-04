@@ -2233,6 +2233,7 @@
                         var msg='Το συγκεκριμένο script απαιτεί έκδοση v'+script.minGameVersion.toFixed(2)+' ή μεγαλύτερη.\nΑυτή τη στιγμή χρησιμοποιείτε την έκδοση: v';
                         twUtil.print(msg);
                         alert(msg);
+                        console.log(twConfig.gameVersion);
                         return;
                     }
 
