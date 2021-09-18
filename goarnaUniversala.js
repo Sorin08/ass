@@ -38,6 +38,21 @@ javascript: (() => {
 	
 var codeBlock = '<div class="mainDiv">' +
                     '<h2>Goarna Universala</h2>' +
+					'<div class="sound-level">' +
+						'<p>Nivel sunet</p>' +
+						'<select id="soundLevel" name="soundLevel">' +
+							'<option value="0.1" selected>Level 1</option>' +
+							'<option value="0.2">Level 2</option>' +
+							'<option value="0.3">Level 3</option>' +
+							'<option value="0.4">Level 4</option>' +
+							'<option value="0.5">Level 5</option>' +
+							'<option value="0.6">Level 6</option>' +
+							'<option value="0.7">Level 7</option>' +
+							'<option value="0.8">Level 8</option>' +
+							'<option value="0.9">Level 9</option>' +
+							'<option value="1">Level 10</option>' +
+						'</select>' +
+					'</div>' +
                     '<div class="container">' +
 						'<div class="col-sm-3">' +
 							'<p><strong>Suna la peste (resurse): </strong> <span id="minAlertResValue">' + minAlertRes + '</span></p>' +
@@ -83,11 +98,8 @@ var codeBlock = '<div class="mainDiv">' +
 					'</div>' +
                 '</div>';
 				
-			
-
 	var list = document.getElementById("contentContainer"); 
 	list.insertAdjacentHTML('beforebegin', codeBlock);
-
 
 	var minAlertResCheckbox = document.getElementById('minAlertResCheckbox');
 	var minAlertRes2 = document.getElementById('minAlertRes2');
@@ -100,6 +112,10 @@ var codeBlock = '<div class="mainDiv">' +
 	
 	var priceCalculatorCheckbox = document.getElementById('priceCalculatorCheckbox');
 	var priceCalculatorNumber = document.getElementById('priceCalculatorNumber');
+	
+	document.getElementById('soundLevel').addEventListener('change', function() {
+	  snd.volume = this.value;
+	});
 	
 	priceCalculatorCheckbox.onchange = function() {
 		if(priceCalculatorCheckbox.checked) {
@@ -135,7 +151,6 @@ var codeBlock = '<div class="mainDiv">' +
 			location.reload();
 		}
     };
-	
 	
 	minAlertPPCheckbox.onchange = function() {
 		if(minAlertPPCheckbox.checked) {
@@ -188,7 +203,6 @@ var codeBlock = '<div class="mainDiv">' +
             PremiumExchange.updateUI();
         });
     }
-	
 	
 	function checkPPCostUp(snd, minAlertRes) {
         getStocks().then((stock) => {
