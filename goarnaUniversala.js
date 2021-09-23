@@ -4,17 +4,22 @@ javascript: (() => {
     var minAlertRes = 0;
     var minAlertPP = 0;
     var maxAlertPP = 0;
-	var calculatedPrice = 0;
-	const minRate = 100;
+    var minAlertPPWood = 0;
+    var minAlertPPStone = 0;
+    var minAlertPPIron = 0;
+    const minRate = 100;
     snd.volume = 0.1;
-	
-	
-	
-	const styles = `
+
+
+
+    const styles = `
     .mainDiv { 
         background: lightgreen;
 		box-shadow: 0px 4px 20px rgba(54, 70, 142, 0.16);
 		padding: 16px;
+    }
+    .mr-3 {
+        margin-right: 12px;
     }
 	.col-sm-3 {
 		width: 49%;
@@ -24,305 +29,348 @@ javascript: (() => {
 	.col-sm-4 {
 		margin-top: 16px;
 	}
-	
+	.col-sm-5 {
+	    width: 90%;
+	    display: flex;
+	    margin-bottom: 8px;
+	}
 	.mainDiv input[type="number"] {
 		width: 50%;
 	}
 `;
 
 
-	var styleSheet = document.createElement("style");
-	styleSheet.type = "text/css";
-	styleSheet.innerText = styles;
-	document.head.appendChild(styleSheet);
-	
-var codeBlock = '<div class="mainDiv">' +
-                    '<h2>Goarna Universala</h2>' +
-					'<div class="sound-level">' +
-						'<p>Nivel sunet</p>' +
-						'<select id="soundLevel" name="soundLevel">' +
-							'<option value="0.1" selected>Level 1</option>' +
-							'<option value="0.2">Level 2</option>' +
-							'<option value="0.3">Level 3</option>' +
-							'<option value="0.4">Level 4</option>' +
-							'<option value="0.5">Level 5</option>' +
-							'<option value="0.6">Level 6</option>' +
-							'<option value="0.7">Level 7</option>' +
-							'<option value="0.8">Level 8</option>' +
-							'<option value="0.9">Level 9</option>' +
-							'<option value="1">Level 10</option>' +
-						'</select>' +
-					'</div>' +
-                    '<div class="container">' +
-						'<div class="col-sm-3">' +
-							'<p><strong>Suna la peste (resurse): </strong> <span id="minAlertResValue">' + minAlertRes + '</span></p>' +
-							'<input type="checkbox" id="minAlertResCheckbox">' +
-							'<input type="number" id="minAlertRes2" placeholder="Introdu valoarea peste care sa sune">' +
-							'<div class="col-sm-4">' +
-								'<p class=""><input type="checkbox" id="rateWood"> Lemn</p>' +
-								'<p class=""><input type="checkbox" id="rateStone"> Argila</p>' +
-								'<p class=""><input type="checkbox" id="rateIron"> Fier</p>' +
-							'</div>' +
-						'</div>' +
-						'<div class="col-sm-3">' +
-							'<p><strong>Suna la peste (resursa/pp): </strong> <span id="minAlertPP">' + minAlertPP + '</span></p>' +
-							'<input type="checkbox" id="minAlertPPCheckbox">' +
-							'<input type="number" id="minAlertPPNumber" placeholder="Introdu costul resursa/pp PESTE care sa sune">' +
-							'<div class="col-sm-4">' +
-								'<p class=""><input type="checkbox" id="minAlertPPNumberrateWood"> Lemn</p>' +
-								'<p class=""><input type="checkbox" id="minAlertPPNumberrateStone"> Argila</p>' +
-								'<p class=""><input type="checkbox" id="minAlertPPNumberrateIron"> Fier</p>' +
-							'</div>' +
-						'</div>' +
-						'<div class="col-sm-3">' +
-							'<p><strong>Suna la sub (resursa/pp): </strong> <span id="maxAlertPP">' + maxAlertPP + '</span></p>' +
-							'<input type="checkbox" id="maxAlertPPCheckbox">' +
-							'<input type="number" id="maxAlertPPNumber" placeholder="Introdu costul resursa/pp SUB care sa sune">' +
-							'<div class="col-sm-4">' +
-								'<p class=""><input type="checkbox" id="maxAlertPPNumberrateWood"> Lemn</p>' +
-								'<p class=""><input type="checkbox" id="maxAlertPPNumberrateStone"> Argila</p>' +
-								'<p class=""><input type="checkbox" id="maxAlertPPNumberrateIron"> Fier</p>' +
-							'</div>' +
-						'</div>' +
-						'<div class="col-sm-3">' +
-							'<p><strong>Calculeaza pret ramas:(beta, ar trebui sa intoarca noul cost resursa/pp)</strong>' +
-							'<input type="checkbox" id="priceCalculatorCheckbox">' +
-							'<input type="number" id="priceCalculatorNumber" placeholder="Introdu cate resurse vrei sa cumperi">' +
-							'<div class="col-sm-4">' +
-								'<p>Noul cost: <span id="priceCalculatorResult">' + calculatedPrice + '</span> (probabil minus 2)</p>' +
-								'<p class=""><input type="checkbox" id="priceCalculatorWood"> Lemn</p>' +
-								'<p class=""><input type="checkbox" id="priceCalculatorStone"> Argila</p>' +
-								'<p class=""><input type="checkbox" id="priceCalculatorIron"> Fier</p>' +
-							'</div>' +
-						'</div>' +
-					'</div>' +
-                '</div>';
-				
-	var list = document.getElementById("contentContainer"); 
-	list.insertAdjacentHTML('beforebegin', codeBlock);
+    var styleSheet = document.createElement("style");
+    styleSheet.type = "text/css";
+    styleSheet.innerText = styles;
+    document.head.appendChild(styleSheet);
 
-	var minAlertResCheckbox = document.getElementById('minAlertResCheckbox');
-	var minAlertRes2 = document.getElementById('minAlertRes2');
-	
-	var maxAlertPPCheckbox = document.getElementById('maxAlertPPCheckbox');
-	var maxAlertPPNumber = document.getElementById('maxAlertPPNumber');
-	
-	var minAlertPPCheckbox = document.getElementById('minAlertPPCheckbox');
-	var minAlertPPNumber = document.getElementById('minAlertPPNumber');
-	
-	var priceCalculatorCheckbox = document.getElementById('priceCalculatorCheckbox');
-	var priceCalculatorNumber = document.getElementById('priceCalculatorNumber');
-	
-	document.getElementById('soundLevel').addEventListener('change', function() {
-	  snd.volume = this.value;
-	});
-	
-	priceCalculatorCheckbox.onchange = function() {
-		if(priceCalculatorCheckbox.checked) {
-			minAlertRes = priceCalculatorNumber.value;
-			
-			setInterval(calcPrice.bind(null, minAlertRes), checkInterval);
-			
-		} else {
-			location.reload();
-		}
+    var codeBlock = '<div class="mainDiv">' +
+        '<h2>Goarna Universala</h2>' +
+        '<div class="sound-level">' +
+        '<p>Nivel sunet</p>' +
+        '<select id="soundLevel" name="soundLevel">' +
+        '<option value="0.1" selected>Level 1</option>' +
+        '<option value="0.2">Level 2</option>' +
+        '<option value="0.3">Level 3</option>' +
+        '<option value="0.4">Level 4</option>' +
+        '<option value="0.5">Level 5</option>' +
+        '<option value="0.6">Level 6</option>' +
+        '<option value="0.7">Level 7</option>' +
+        '<option value="0.8">Level 8</option>' +
+        '<option value="0.9">Level 9</option>' +
+        '<option value="1">Level 10</option>' +
+        '</select>' +
+        '</div>' +
+        '<div class="container">' +
+        '<div class="col-sm-3">' +
+        '<p><strong>Suna la peste (resurse): </strong> <span id="minAlertResValue">' + minAlertRes + '</span></p>' +
+        '<input type="checkbox" id="minAlertResCheckbox">' +
+        '<input type="number" id="minAlertRes2" placeholder="Introdu valoarea peste care sa sune">' +
+        '<div class="col-sm-4">' +
+        '<label class="mr-3"><input type="checkbox" id="rateWood"> Lemn</label>' +
+        '<label class="mr-3"><input type="checkbox" id="rateStone"> Argila</label>' +
+        '<label class="mr-3"><input type="checkbox" id="rateIron"> Fier</label>' +
+        '</div>' +
+        '</div>' +
+        '<div class="col-sm-3">' +
+        '<p><strong>Suna la peste (resursa/pp): </strong> <span id="minAlertPP">' + minAlertPP + '</span></p>' +
+        '<input type="checkbox" id="minAlertPPCheckbox">' +
+        '<input type="number" id="minAlertPPNumber" placeholder="Introdu costul resursa/pp PESTE care sa sune">' +
+        '<div class="col-sm-4">' +
+        '<label class="mr-3"><input type="checkbox" id="minAlertPPNumberrateWood"> Lemn</label>' +
+        '<label class="mr-3"><input type="checkbox" id="minAlertPPNumberrateStone"> Argila</label>' +
+        '<label class="mr-3"><input type="checkbox" id="minAlertPPNumberrateIron"> Fier</label>' +
+        '</div>' +
+        '</div>' +
+        '<div class="col-sm-3">' +
+        '<p><strong>Suna la sub (resursa/pp): </strong> <span id="maxAlertPP">' + maxAlertPP + '</span></p>' +
+        '<input type="checkbox" id="maxAlertPPCheckbox">' +
+        '<input type="number" id="maxAlertPPNumber" placeholder="Introdu costul resursa/pp SUB care sa sune">' +
+        '<div class="col-sm-4">' +
+        '<label class="mr-3"><input type="checkbox" id="maxAlertPPNumberrateWood"> Lemn</label>' +
+        '<label class="mr-3"><input type="checkbox" id="maxAlertPPNumberrateStone"> Argila</label>' +
+        '<label class="mr-3"><input type="checkbox" id="maxAlertPPNumberrateIron"> Fier</label>' +
+        '</div>' +
+        '</div>' +
+        '<div class="col-sm-3">' +
+        '<p><strong>Suna la peste, in functie de resursa</strong>' +
+        '<div class="col-sm-5">' +
+        '<input type="number" id="maxAlertPPNumberAloneWood" placeholder="Introdu costul resursa/pp SUB care sa sune">' +
+        '<label class="mr-3"><input type="checkbox" id="priceCalculatorAloneWood"> Lemn</label>' +
+        '</div>' +
+        '<div class="col-sm-5">' +
+        '<input type="number" id="maxAlertPPNumberAloneStone" placeholder="Introdu costul resursa/pp SUB care sa sune">' +
+        '<label class="mr-3"><input type="checkbox" id="priceCalculatorAloneStone"> Argila</label>' +
+        '</div>' +
+        '<div class="col-sm-5">' +
+        '<input type="number" id="maxAlertPPNumberAloneIron" placeholder="Introdu costul resursa/pp SUB care sa sune">' +
+        '<label class="mr-3"><input type="checkbox" id="priceCalculatorAloneIron"> Fier</label>' +
+        '</div>' +
+        '</div>' +
+        '</div>' +
+        '</div>';
+
+    var list = document.getElementById("contentContainer");
+    list.insertAdjacentHTML('beforebegin', codeBlock);
+
+    var minAlertResCheckbox = document.getElementById('minAlertResCheckbox');
+    var minAlertRes2 = document.getElementById('minAlertRes2');
+
+    var maxAlertPPCheckbox = document.getElementById('maxAlertPPCheckbox');
+    var maxAlertPPNumber = document.getElementById('maxAlertPPNumber');
+
+    var minAlertPPCheckbox = document.getElementById('minAlertPPCheckbox');
+    var minAlertPPNumber = document.getElementById('minAlertPPNumber');
+
+    var maxAlertPPNumberAloneWood = document.getElementById('maxAlertPPNumberAloneWood');
+    var priceCalculatorAloneWood = document.getElementById('priceCalculatorAloneWood');
+
+
+    var maxAlertPPNumberAloneStone = document.getElementById('maxAlertPPNumberAloneStone');
+    var priceCalculatorAloneStone = document.getElementById('priceCalculatorAloneStone');
+
+
+    var maxAlertPPNumberAloneIron = document.getElementById('maxAlertPPNumberAloneIron');
+    var priceCalculatorAloneIron = document.getElementById('priceCalculatorAloneIron');
+
+    document.getElementById('soundLevel').addEventListener('change', function() {
+        snd.volume = this.value;
+    });
+
+    priceCalculatorAloneIron.onchange = function() {
+        if(priceCalculatorAloneIron.checked) {
+            minAlertPPIron = maxAlertPPNumberAloneIron.value;
+
+            setInterval(checkResourcesIron.bind(null, snd, minAlertPPIron), checkInterval);
+
+        } else {
+            location.reload();
+        }
     };
-	
-	minAlertResCheckbox.onchange = function() {
-		if(minAlertResCheckbox.checked) {
-			minAlertRes = minAlertRes2.value;
-			document.getElementById('minAlertResValue').innerText = minAlertRes;
-			
-			setInterval(checkResources.bind(null, snd, minAlertRes), checkInterval);
-			
-		} else {
-			location.reload();
-		}
+
+    priceCalculatorAloneStone.onchange = function() {
+        if(priceCalculatorAloneStone.checked) {
+            minAlertPPStone = maxAlertPPNumberAloneStone.value;
+
+            setInterval(checkResourcesStone.bind(null, snd, minAlertPPStone), checkInterval);
+
+        } else {
+            location.reload();
+        }
     };
-	
-	maxAlertPPCheckbox.onchange = function() {
-		if(maxAlertPPCheckbox.checked) {
-			maxAlertPP = maxAlertPPNumber.value;
-			document.getElementById('maxAlertPP').innerText = maxAlertPP;
-			
-			setInterval(checkPPCostDown.bind(null, snd, maxAlertPP), checkInterval);
-			
-		} else {
-			location.reload();
-		}
+
+    priceCalculatorAloneWood.onchange = function() {
+        if(priceCalculatorAloneWood.checked) {
+            minAlertPPWood = maxAlertPPNumberAloneWood.value;
+
+            setInterval(checkResourcesWood.bind(null, snd, minAlertPPWood), checkInterval);
+
+        } else {
+            location.reload();
+        }
     };
-	
-	minAlertPPCheckbox.onchange = function() {
-		if(minAlertPPCheckbox.checked) {
-			minAlertPP = minAlertPPNumber.value;
-			document.getElementById('minAlertPP').innerText = minAlertPP;
-			
-			setInterval(checkPPCostUp.bind(null, snd, minAlertPP), checkInterval);
-			
-		} else {
-			location.reload();
-		}
+
+    minAlertPPCheckbox.onchange = function() {
+        if(minAlertPPCheckbox.checked) {
+            minAlertPP = minAlertPPNumber.value;
+            document.getElementById('minAlertPP').innerText = minAlertPP;
+
+            setInterval(checkPPCostUp.bind(null, snd, minAlertPP), checkInterval);
+
+        } else {
+            location.reload();
+        }
     };
-	
-    function calcPrice(val) {
+
+    minAlertResCheckbox.onchange = function() {
+        if(minAlertResCheckbox.checked) {
+            minAlertRes = minAlertRes2.value;
+            document.getElementById('minAlertResValue').innerText = minAlertRes;
+
+            setInterval(checkResources.bind(null, snd, minAlertRes), checkInterval);
+
+        } else {
+            location.reload();
+        }
+    };
+
+    maxAlertPPCheckbox.onchange = function() {
+        if(maxAlertPPCheckbox.checked) {
+            maxAlertPP = maxAlertPPNumber.value;
+            document.getElementById('maxAlertPP').innerText = maxAlertPP;
+
+            setInterval(checkPPCostDown.bind(null, snd, maxAlertPP), checkInterval);
+
+        } else {
+            location.reload();
+        }
+    };
+
+    function checkPPCostUp(snd, minAlertRes) {
         getStocks().then((stock) => {
-			PremiumExchange.data.stock = stock;
-			rateWood = stock.wood;
-			rateStone = stock.stone;
-			rateIron = stock.iron;
-			
-			function calculateStock(val, e) {
-				for (var a = val, r = PremiumExchange.data.capacity[e], t = (PremiumExchange.data.tax.buy, PremiumExchange.calculateMarginalPrice(a, r)), i = Math.floor(1 / t), c = PremiumExchange.calculateCost(e, i), n = 0; c > 1 && n < 50;) i--, n++, c = PremiumExchange.calculateCost(e, i);
-				return i;
-			}
-			
-			var checkedRateWood = document.getElementById('priceCalculatorWood');
-			var checkedRateStone = document.getElementById('priceCalculatorStone');
-			var checkedRateIron = document.getElementById('priceCalculatorIron');
-			
-			console.log(calculateStock(25000, 'iron'));
-			if(checkedRateWood.checked) {
-				PremiumExchange.updateUI();
-				var calculate = rateWood - val;
-				calculatedPrice = calculateStock(calculate, 'wood');
-				document.getElementById('priceCalculatorResult').innerText = calculatedPrice;
-			}
-			
-			if(checkedRateStone.checked) {
-				PremiumExchange.updateUI();
-				calculatedPrice = calculateStock(rateStone - val, 'stone');
-				document.getElementById('priceCalculatorResult').innerText = calculatedPrice;
-			}
-			
-			if(checkedRateIron.checked) {
-				PremiumExchange.updateUI();
-				calculatedPrice = calculateStock(rateIron - val, 'iron');
-				document.getElementById('priceCalculatorResult').innerText = calculatedPrice;
-				console.log(calculateStock(rateIron - val, 'iron'));
-			}
+            PremiumExchange.data.stock = stock;
+
+            rateWood = PremiumExchange.calculateRateForOnePoint('wood');
+            rateStone = PremiumExchange.calculateRateForOnePoint('stone');
+            rateIron = PremiumExchange.calculateRateForOnePoint('iron');
+
+            var checkedRateWood = document.getElementById('minAlertPPNumberrateWood');
+            var checkedRateStone = document.getElementById('minAlertPPNumberrateStone');
+            var checkedRateIron = document.getElementById('minAlertPPNumberrateIron');
+
+
+            if(checkedRateWood.checked) {
+                PremiumExchange.updateUI();
+                if (rateWood > minAlertRes) {
+                    snd.play();
+                }
+            }
+
+            if(checkedRateStone.checked) {
+                PremiumExchange.updateUI();
+                if (rateStone > minAlertRes) {
+                    snd.play();
+                }
+            }
+
+            if(checkedRateIron.checked) {
+                PremiumExchange.updateUI();
+                if (rateIron > minAlertRes) {
+                    snd.play();
+                }
+            }
+
+            PremiumExchange.updateUI();
+
+        });
+    }
+
+    function checkResourcesWood(snd, minAlertRes) {
+        getStocks().then((stock) => {
+            PremiumExchange.data.stock = stock;
+            rateWood = PremiumExchange.calculateRateForOnePoint('wood');
+            var checkedRateWood = document.getElementById('priceCalculatorAloneWood');
+            if(checkedRateWood.checked) {
+                PremiumExchange.updateUI();
+                if (rateWood > minAlertRes) {
+                    snd.play();
+                }
+            }
             PremiumExchange.updateUI();
         });
     }
-	
-	function checkPPCostUp(snd, minAlertRes) {
+
+    function checkResourcesStone(snd, minAlertRes) {
         getStocks().then((stock) => {
-            PremiumExchange.data.stock = stock;	
-			
-			rateWood = PremiumExchange.calculateRateForOnePoint('wood');
-			rateStone = PremiumExchange.calculateRateForOnePoint('stone');
-			rateIron = PremiumExchange.calculateRateForOnePoint('iron');
-			
-			var checkedRateWood = document.getElementById('minAlertPPNumberrateWood');
-			var checkedRateStone = document.getElementById('minAlertPPNumberrateStone');
-			var checkedRateIron = document.getElementById('minAlertPPNumberrateIron');
-			
+            PremiumExchange.data.stock = stock;
+            rateStone = PremiumExchange.calculateRateForOnePoint('stone');
+            var checkedRateStone = document.getElementById('priceCalculatorAloneStone');
+            if(checkedRateStone.checked) {
+                PremiumExchange.updateUI();
+                if (rateStone > minAlertRes) {
+                    snd.play();
+                }
+            }
+            PremiumExchange.updateUI();
+        });
+    }
 
-				if(checkedRateWood.checked) {
-					PremiumExchange.updateUI();
-					if (rateWood > minAlertRes) {
-						snd.play();
-					}
-				}
+    function checkResourcesIron(snd, minAlertRes) {
+        getStocks().then((stock) => {
+            PremiumExchange.data.stock = stock;
+            rateIron = PremiumExchange.calculateRateForOnePoint('iron');
+            var checkedRateIron = document.getElementById('priceCalculatorAloneIron');
+            if(checkedRateIron.checked) {
+                PremiumExchange.updateUI();
+                if (rateIron > minAlertRes) {
+                    snd.play();
+                }
+            }
+            PremiumExchange.updateUI();
+        });
+    }
 
-				if(checkedRateStone.checked) {
-					PremiumExchange.updateUI();
-					if (rateStone > minAlertRes) {
-						snd.play();
-					}
-				}
-			
-				if(checkedRateIron.checked) {
-					PremiumExchange.updateUI();
-					if (rateIron > minAlertRes) {
-						snd.play();
-					}
-				}
-		
-			PremiumExchange.updateUI();
+    function checkPPCostDown(snd, minAlertRes) {
+        getStocks().then((stock) => {
+            PremiumExchange.data.stock = stock;
+
+            rateWood = PremiumExchange.calculateRateForOnePoint('wood');
+            rateStone = PremiumExchange.calculateRateForOnePoint('stone');
+            rateIron = PremiumExchange.calculateRateForOnePoint('iron');
+
+            var checkedRateWood = document.getElementById('maxAlertPPNumberrateWood');
+            var checkedRateStone = document.getElementById('maxAlertPPNumberrateStone');
+            var checkedRateIron = document.getElementById('maxAlertPPNumberrateIron');
+
+
+            if(checkedRateWood.checked) {
+                PremiumExchange.updateUI();
+                if (rateWood < minAlertRes) {
+                    snd.play();
+                }
+            }
+
+            if(checkedRateStone.checked) {
+                PremiumExchange.updateUI();
+                if (rateStone < minAlertRes) {
+                    snd.play();
+                }
+            }
+
+            if(checkedRateIron.checked) {
+                PremiumExchange.updateUI();
+                if (rateIron < minAlertRes) {
+                    snd.play();
+                }
+            }
+
+            PremiumExchange.updateUI();
 
         });
     }
-	
-	function checkPPCostDown(snd, minAlertRes) {
-        getStocks().then((stock) => {
-            PremiumExchange.data.stock = stock;	
-			
-			rateWood = PremiumExchange.calculateRateForOnePoint('wood');
-			rateStone = PremiumExchange.calculateRateForOnePoint('stone');
-			rateIron = PremiumExchange.calculateRateForOnePoint('iron');
-			
-			var checkedRateWood = document.getElementById('maxAlertPPNumberrateWood');
-			var checkedRateStone = document.getElementById('maxAlertPPNumberrateStone');
-			var checkedRateIron = document.getElementById('maxAlertPPNumberrateIron');
-			
 
-				if(checkedRateWood.checked) {
-					PremiumExchange.updateUI();
-					if (rateWood < minAlertRes) {
-						snd.play();
-					}
-				}
-
-				if(checkedRateStone.checked) {
-					PremiumExchange.updateUI();
-					if (rateStone < minAlertRes) {
-						snd.play();
-					}
-				}
-			
-				if(checkedRateIron.checked) {
-					PremiumExchange.updateUI();
-					if (rateIron < minAlertRes) {
-						snd.play();
-					}
-				}
-		
-			PremiumExchange.updateUI();
-
-        });
-    }
-	
 
     function checkResources(snd, minAlertRes) {
         getStocks().then((stock) => {
-            PremiumExchange.data.stock = stock;	
-			
-			rateWood = stock.wood;
-			rateStone = stock.stone;
-			rateIron = stock.iron;
-			console.log(rateWood);
-			
-			var checkedRateWood = document.getElementById('rateWood');
-			var checkedRateStone = document.getElementById('rateStone');
-			var checkedRateIron = document.getElementById('rateIron');
-			
+            PremiumExchange.data.stock = stock;
 
-				if(checkedRateWood.checked) {
-					PremiumExchange.updateUI();
-					if (rateWood > minAlertRes) {
-						snd.play();
-					}
-				}
+            rateWood = stock.wood;
+            rateStone = stock.stone;
+            rateIron = stock.iron;
+            console.log(rateWood);
 
-				if(checkedRateStone.checked) {
-					PremiumExchange.updateUI();
-					if (rateStone > minAlertRes) {
-						snd.play();
-					}
-				}
-			
-				if(checkedRateIron.checked) {
-					PremiumExchange.updateUI();
-					if (rateIron > minAlertRes) {
-						snd.play();
-					}
-				}
-		
-			PremiumExchange.updateUI();
+            var checkedRateWood = document.getElementById('rateWood');
+            var checkedRateStone = document.getElementById('rateStone');
+            var checkedRateIron = document.getElementById('rateIron');
+
+
+            if(checkedRateWood.checked) {
+                PremiumExchange.updateUI();
+                if (rateWood > minAlertRes) {
+                    snd.play();
+                }
+            }
+
+            if(checkedRateStone.checked) {
+                PremiumExchange.updateUI();
+                if (rateStone > minAlertRes) {
+                    snd.play();
+                }
+            }
+
+            if(checkedRateIron.checked) {
+                PremiumExchange.updateUI();
+                if (rateIron > minAlertRes) {
+                    snd.play();
+                }
+            }
+
+            PremiumExchange.updateUI();
 
         });
     }
-    
+
 
     function getStocks() {
         return new Promise((resolve, reject) => {
@@ -333,5 +381,5 @@ var codeBlock = '<div class="mainDiv">' +
             });
         });
     }
-	
+
 })();
