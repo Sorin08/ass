@@ -29,9 +29,7 @@ var codeBlock = '<div class="mainDiv">' +
 
 	function pressMInterval() {
 		let randomPress = getRandomArbitrary(200, 250);
-		console.log(randomPress);
 		nIntervId = setInterval(pressM, randomPress);
-		console.log(randomPress);
 	}
 	
 	function getRandomArbitrary(min, max) {
