@@ -338,7 +338,6 @@ javascript: (() => {
             rateWood = stock.wood;
             rateStone = stock.stone;
             rateIron = stock.iron;
-            console.log(rateWood);
 
             var checkedRateWood = document.getElementById('rateWood');
             var checkedRateStone = document.getElementById('rateStone');
