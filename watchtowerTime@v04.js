@@ -123,23 +123,22 @@ javascript:
                 seconds = (+hms[0]) * 3600 + (+hms[1]) * 60 + (+hms[2]),
                 // extract command name
                 commandName = $("#incomings_table").find("tr").eq(timesRun).find("td").eq(0)[0].innerHTML;
-
             // convert arrival time to field (?)
 
             //console.log(commandName);
             if (commandName.includes("sword") || commandName.includes("spad")) {
                 var remainingFields = seconds / unitSpeed[0];
-            } else if (commandName.includes("axe") || commandName.includes("spear") || commandName.includes("topor") || commandName.includes("Topor")) {
+            } else if (commandName.includes("axe") || commandName.includes("spear") || commandName.includes("topor")) {
                 var remainingFields = seconds / unitSpeed[1];
-            } else if (commandName.includes("spy") || commandName.includes("scout") || commandName.includes("spion") || commandName.includes("Spion")) {
+            } else if (commandName.includes("spy") || commandName.includes("scout") || commandName.includes("spion")) {
                 var remainingFields = seconds / unitSpeed[2];
-            } else if (commandName.includes("lcav") || commandName.includes("light") || commandName.includes("Light") || commandName.includes("Lcav")) 
+            } else if (commandName.includes("lcav") || commandName.includes("light")) {
                 var remainingFields = seconds / unitSpeed[3];
-            } else if (commandName.includes("hcav") || commandName.includes("heavy") || commandName.includes("Hcav") || commandName.includes("Heavy")) {
+            } else if (commandName.includes("hcav") || commandName.includes("heavy")) {
                 var remainingFields = seconds / unitSpeed[4];
-            } else if (commandName.includes("ram") || commandName.includes("cat") || commandName.includes("berbec"))  {
+            } else if (commandName.includes("ram") || commandName.includes("cat") || commandName.includes("berbec")) {
                 var remainingFields = seconds / unitSpeed[5];
-            }else if (commandName.includes("noble") || commandName.includes("snob") || commandName.includes("gn") || commandName.includes("nobil") || commandName.includes("GN")) {
+            }else if (commandName.includes("noble") || commandName.includes("snob") || commandName.includes("gn") || commandName.includes("nobil")) {
                 var remainingFields = seconds / unitSpeed[6];
             }
             //console.log(hatralevo_mezo);
