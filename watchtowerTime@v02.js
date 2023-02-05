@@ -139,7 +139,7 @@ javascript:
                 var remainingFields = seconds / unitSpeed[4];
             } else if (commandName.includes("ram") || commandName.includes("cat") || commandName.includes("berbec"))  {
                 var remainingFields = seconds / unitSpeed[5];
-            }else if (commandName.includes("noble") || commandName.includes("snob") || commandName.includes("gn") || commandName.includes("nobil")) || commandName.includes("GN") {
+            }else if (commandName.includes("noble") || commandName.includes("snob") || commandName.includes("gn") || commandName.includes("nobil") || commandName.includes("GN")) {
                 var remainingFields = seconds / unitSpeed[6];
             }
             //console.log(hatralevo_mezo);
