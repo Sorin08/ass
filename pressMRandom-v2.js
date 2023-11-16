@@ -85,7 +85,7 @@ javascript: (() => {
     }
 
     function pressMInterval() {
-        let randomPress = getRandomArbitrary(400, 750);
+        let randomPress = getRandomArbitrary(200, 250);
         pressIntervalID = setInterval(() => {
             if (timeToStop > 0) {
                 pressM();
