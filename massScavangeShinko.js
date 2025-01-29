@@ -1440,5 +1440,3 @@ is_locked: (true or false)
 unlock_time: null
 scavenging_squad: null
 */
-
-}
