@@ -1459,160 +1459,188 @@ function displayEverything() {
                     }
 
                     //assign excess to shortage
-                    for (let q = shortageResources.length - 1; q >= 0; q--) {
-                        $("#progress").css("width", `${(shortageResources.length - q) / shortageResources.length * 100}%`);
-                        //check distances to all villages
-                        for (let d = 0; d < merchantOrders.length; d++) {
-                            merchantOrders[d].distance = checkDistance(merchantOrders[d].x, merchantOrders[d].y, villagesData[q].name.match(/(\d+)\|(\d+)/)[1], villagesData[q].name.match(/(\d+)\|(\d+)/)[2]);
-                        }
-                        merchantOrders.sort(function (left, right) { return left.distance - right.distance; });
+for (let q = shortageResources.length - 1; q >= 0; q--) {
+    $("#progress").css("width", `${(shortageResources.length - q) / shortageResources.length * 100}%`);
+    
+    // Calculate the distance from each sending village (merchantOrders) to the current shortage village.
+    for (let d = 0; d < merchantOrders.length; d++) {
+        merchantOrders[d].distance = checkDistance(
+            merchantOrders[d].x, merchantOrders[d].y, 
+            villagesData[q].name.match(/(\d+)\|(\d+)/)[1], 
+            villagesData[q].name.match(/(\d+)\|(\d+)/)[2]
+        );
+    }
+    // Sort the orders by distance (closest first)
+    merchantOrders.sort(function (left, right) { return left.distance - right.distance; });
+    
+    // *** NEW: Only keep orders with a distance within the user‐defined maximum.
     merchantOrders = merchantOrders.filter(order => settings.maxDistance === 0 || order.distance <= settings.maxDistance);
-
-                        if (shortageResources[q][0].wood <= 0) {
-                            //no shortage
-                        }
-                        else {
-                            //check if we need wood
-                            while (shortageResources[q][0].wood > 0) {
-                                var totalWoodToTrade = 0;
-
-                                for (let m = 0; m < merchantOrders.length; m++) {
-                                    totalWoodToTrade += merchantOrders[m].wood;
-                                    if (merchantOrders[m].wood > 0) {
-                                        //merchants assigned to wood, use them to fill up the request
-                                        //check if more merchants than needed
-                                        if (shortageResources[q][0].wood <= merchantOrders[m].wood * 1000) {
-                                            //more  than needed, assign enough
-                                            links.push({ "source": merchantOrders[m].villageID, "target": villageID[q], "wood": shortageResources[q][0].wood });
-                                            merchantOrders[m].wood -= shortageResources[q][0].wood / 1000;
-                                            shortageResources[q][0].wood = 0;
-                                        }
-                                        if (shortageResources[q][0].wood > merchantOrders[m].wood * 1000) {
-                                            //less merchants than needed
-                                            links.push({ "source": merchantOrders[m].villageID, "target": villageID[q], "wood": merchantOrders[m].wood * 1000 });
-                                            shortageResources[q][0].wood -= merchantOrders[m].wood * 1000;
-                                            merchantOrders[m].wood = 0;
-                                        }
-                                    }
-                                    if (shortageResources[q][0].wood <= 0) { break; }
-                                    if (m == merchantOrders.length - 1 && shortageResources[q][0].wood > 0) {
-                                        console.log("Done with this cycle");
-                                        totalWoodToTrade = 0;
-                                        break;
-                                    }
-                                }
-                                if (totalWoodToTrade == 0) {
-
-                                    q = 0;
-                                    //alert("No wood to trade left, breaking");
-                                    break;
-                                }
-                            }
-                        }
+    
+    if (shortageResources[q][0].wood <= 0) {
+        // no wood shortage
+    } else {
+        while (shortageResources[q][0].wood > 0) {
+            var totalWoodToTrade = 0;
+            for (let m = 0; m < merchantOrders.length; m++) {
+                totalWoodToTrade += merchantOrders[m].wood;
+                if (merchantOrders[m].wood > 0) {
+                    if (shortageResources[q][0].wood <= merchantOrders[m].wood * 1000) {
+                        links.push({ "source": merchantOrders[m].villageID, "target": villageID[q], "wood": shortageResources[q][0].wood });
+                        merchantOrders[m].wood -= shortageResources[q][0].wood / 1000;
+                        shortageResources[q][0].wood = 0;
+                    } else {
+                        links.push({ "source": merchantOrders[m].villageID, "target": villageID[q], "wood": merchantOrders[m].wood * 1000 });
+                        shortageResources[q][0].wood -= merchantOrders[m].wood * 1000;
+                        merchantOrders[m].wood = 0;
                     }
+                }
+                if (shortageResources[q][0].wood <= 0) { break; }
+                if (m === merchantOrders.length - 1 && shortageResources[q][0].wood > 0) {
+                    console.log("Done with this cycle");
+                    totalWoodToTrade = 0;
+                    break;
+                }
+            }
+            if (totalWoodToTrade === 0) {
+                q = 0;
+                break;
+            }
+        }
+    }
+}
+
+
 
                     //assign excess to shortage
-                    for (let q = shortageResources.length - 1; q >= 0; q--) {
-                        $("#progress").css("width", `${(shortageResources.length - q) / shortageResources.length * 100}%`);
-                        for (var d = 0; d < merchantOrders.length; d++) {
-                            merchantOrders[d].distance = checkDistance(merchantOrders[d].x, merchantOrders[d].y, villagesData[q].name.match(/(\d+)\|(\d+)/)[1], villagesData[q].name.match(/(\d+)\|(\d+)/)[2]);
-                        }
-                        merchantOrders.sort(function (left, right) { return left.distance - right.distance; });
+ for (let q = shortageResources.length - 1; q >= 0; q--) {
+    $("#progress").css("width", `${(shortageResources.length - q) / shortageResources.length * 100}%`);
+    
+    // Calculate distances from each sending village (merchantOrders) to the current shortage village
+    for (let d = 0; d < merchantOrders.length; d++) {
+        merchantOrders[d].distance = checkDistance(
+            merchantOrders[d].x, 
+            merchantOrders[d].y, 
+            villagesData[q].name.match(/(\d+)\|(\d+)/)[1], 
+            villagesData[q].name.match(/(\d+)\|(\d+)/)[2]
+        );
+    }
+    // Sort the orders by distance (closest first)
+    merchantOrders.sort((left, right) => left.distance - right.distance);
+    
+    // Filter orders to only include those within the maxDistance (unless maxDistance === 0, meaning no limit)
     merchantOrders = merchantOrders.filter(order => settings.maxDistance === 0 || order.distance <= settings.maxDistance);
-
-                        if (shortageResources[q][1].stone <= 0) {
-                            //no shortage
-                        }
-                        else {
-                            //check if we need stone
-                            while (shortageResources[q][1].stone > 0) {
-                                console.log(q);
-                                var totalstoneToTrade = 0;
-                                for (var m = 0; m < merchantOrders.length; m++) {
-                                    totalstoneToTrade += merchantOrders[m].stone;
-                                    if (merchantOrders[m].stone > 0) {
-                                        //merchants assigned to stone, use them to fill up the request
-                                        //check if more merchants than needed
-                                        if (shortageResources[q][1].stone <= merchantOrders[m].stone * 1000) {
-                                            //more  than needed, assign enough
-                                            links.push({ "source": merchantOrders[m].villageID, "target": villageID[q], "stone": shortageResources[q][1].stone });
-                                            merchantOrders[m].stone -= shortageResources[q][1].stone / 1000;
-                                            shortageResources[q][1].stone = 0;
-                                        }
-                                        if (shortageResources[q][1].stone > merchantOrders[m].stone * 1000) {
-                                            //less merchants than needed
-                                            links.push({ "source": merchantOrders[m].villageID, "target": villageID[q], "stone": merchantOrders[m].stone * 1000 });
-                                            shortageResources[q][1].stone -= merchantOrders[m].stone * 1000;
-                                            merchantOrders[m].stone = 0;
-                                        }
-                                    }
-                                    if (shortageResources[q][1].stone <= 0) { break; }
-                                    if (m == merchantOrders.length - 1 && shortageResources[q][1].stone > 0) {
-                                        console.log("Done with this cycle");
-                                        totalstoneToTrade = 0;
-                                        break;
-                                    }
-                                }
-                                if (totalstoneToTrade == 0) {
-
-                                    q = 0;
-                                    //alert("No stone to trade left, breaking");
-                                    break;
-                                }
-                            }
-                        }
+    
+    if (shortageResources[q][1].stone <= 0) {
+        // No stone shortage for this village
+    } else {
+        while (shortageResources[q][1].stone > 0) {
+            let totalStoneToTrade = 0;
+            for (let m = 0; m < merchantOrders.length; m++) {
+                totalStoneToTrade += merchantOrders[m].stone;
+                if (merchantOrders[m].stone > 0) {
+                    // If the shortage is less than or equal to what this order can send:
+                    if (shortageResources[q][1].stone <= merchantOrders[m].stone * 1000) {
+                        links.push({ 
+                            "source": merchantOrders[m].villageID, 
+                            "target": villageID[q], 
+                            "stone": shortageResources[q][1].stone 
+                        });
+                        merchantOrders[m].stone -= shortageResources[q][1].stone / 1000;
+                        shortageResources[q][1].stone = 0;
+                    } else {
+                        // Use up all merchants from this order:
+                        links.push({ 
+                            "source": merchantOrders[m].villageID, 
+                            "target": villageID[q], 
+                            "stone": merchantOrders[m].stone * 1000 
+                        });
+                        shortageResources[q][1].stone -= merchantOrders[m].stone * 1000;
+                        merchantOrders[m].stone = 0;
                     }
+                }
+                if (shortageResources[q][1].stone <= 0) { 
+                    break; 
+                }
+                if (m === merchantOrders.length - 1 && shortageResources[q][1].stone > 0) {
+                    console.log("Done with stone cycle");
+                    totalStoneToTrade = 0;
+                    break;
+                }
+            }
+            if (totalStoneToTrade === 0) {
+                // If no more stone is available for trade, break out of the loop
+                q = 0;
+                break;
+            }
+        }
+    }
+}
+
 
                     //assign excess to shortage
-                    for (let q = shortageResources.length - 1; q >= 0; q--) {
-                        $("#progress").css("width", `${(shortageResources.length - q) / shortageResources.length * 100}%`);
-                        for (let d = 0; d < merchantOrders.length; d++) {
-                            merchantOrders[d].distance = checkDistance(merchantOrders[d].x, merchantOrders[d].y, villagesData[q].name.match(/(\d+)\|(\d+)/)[1], villagesData[q].name.match(/(\d+)\|(\d+)/)[2]);
-                        }
-                        merchantOrders.sort(function (left, right) { return left.distance - right.distance; });
+for (let q = shortageResources.length - 1; q >= 0; q--) {
+    $("#progress").css("width", `${(shortageResources.length - q) / shortageResources.length * 100}%`);
+    
+    // Calculate distances from each sending village (merchantOrders) to the current shortage village
+    for (let d = 0; d < merchantOrders.length; d++) {
+        merchantOrders[d].distance = checkDistance(
+            merchantOrders[d].x, 
+            merchantOrders[d].y, 
+            villagesData[q].name.match(/(\d+)\|(\d+)/)[1], 
+            villagesData[q].name.match(/(\d+)\|(\d+)/)[2]
+        );
+    }
+    // Sort the orders by distance (closest first)
+    merchantOrders.sort((left, right) => left.distance - right.distance);
+    
+    // Filter orders by maxDistance as per user settings (0 means no limit)
     merchantOrders = merchantOrders.filter(order => settings.maxDistance === 0 || order.distance <= settings.maxDistance);
-
-                        if (shortageResources[q][2].iron <= 0) {
-                            //no shortage
-                        }
-                        else {
-                            //check if we need iron
-                            while (shortageResources[q][2].iron > 0) {
-                                var totalironToTrade = 0;
-                                for (let m = 0; m < merchantOrders.length; m++) {
-                                    totalironToTrade += merchantOrders[m].iron;
-                                    if (merchantOrders[m].iron > 0) {
-                                        //merchants assigned to iron, use them to fill up the request
-                                        //check if more merchants than needed
-                                        if (shortageResources[q][2].iron <= merchantOrders[m].iron * 1000) {
-                                            //more  than needed, assign enough
-                                            links.push({ "source": merchantOrders[m].villageID, "target": villageID[q], "iron": shortageResources[q][2].iron });
-                                            merchantOrders[m].iron -= shortageResources[q][2].iron / 1000;
-                                            shortageResources[q][2].iron = 0;
-                                        }
-                                        if (shortageResources[q][2].iron > merchantOrders[m].iron * 1000) {
-                                            //less merchants than needed
-                                            links.push({ "source": merchantOrders[m].villageID, "target": villageID[q], "iron": merchantOrders[m].iron * 1000 });
-                                            shortageResources[q][2].iron -= merchantOrders[m].iron * 1000;
-                                            merchantOrders[m].iron = 0;
-                                        }
-                                    }
-                                    if (shortageResources[q][2].iron <= 0) { break; }
-                                    if (m == merchantOrders.length - 1 && shortageResources[q][2].iron > 0) {
-                                        console.log("Done with this cycle");
-                                        totalironToTrade = 0;
-                                        break;
-                                    }
-                                }
-                                if (totalironToTrade == 0) {
-
-                                    q = 0;
-                                    //alert("No iron to trade left, breaking");
-                                    break;
-                                }
-                            }
-                        }
+    
+    if (shortageResources[q][2].iron <= 0) {
+        // No iron shortage for this village
+    } else {
+        while (shortageResources[q][2].iron > 0) {
+            let totalIronToTrade = 0;
+            for (let m = 0; m < merchantOrders.length; m++) {
+                totalIronToTrade += merchantOrders[m].iron;
+                if (merchantOrders[m].iron > 0) {
+                    // If the shortage is less than or equal to what this order can send:
+                    if (shortageResources[q][2].iron <= merchantOrders[m].iron * 1000) {
+                        links.push({ 
+                            "source": merchantOrders[m].villageID, 
+                            "target": villageID[q], 
+                            "iron": shortageResources[q][2].iron 
+                        });
+                        merchantOrders[m].iron -= shortageResources[q][2].iron / 1000;
+                        shortageResources[q][2].iron = 0;
+                    } else {
+                        // Use up all merchants from this order:
+                        links.push({ 
+                            "source": merchantOrders[m].villageID, 
+                            "target": villageID[q], 
+                            "iron": merchantOrders[m].iron * 1000 
+                        });
+                        shortageResources[q][2].iron -= merchantOrders[m].iron * 1000;
+                        merchantOrders[m].iron = 0;
                     }
+                }
+                if (shortageResources[q][2].iron <= 0) { 
+                    break; 
+                }
+                if (m === merchantOrders.length - 1 && shortageResources[q][2].iron > 0) {
+                    console.log("Done with iron cycle");
+                    totalIronToTrade = 0;
+                    break;
+                }
+            }
+            if (totalIronToTrade === 0) {
+                // If no more iron is available for trade, break out of the loop
+                q = 0;
+                break;
+            }
+        }
+    }
+}
                     $("#progress").remove();
                     //assigned all merchants
 
