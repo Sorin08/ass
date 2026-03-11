@@ -51,7 +51,7 @@ javascript:(() => {
 
     function openFarmTab() {
         const currentVillage = getVillageNumber() || startingVillage || '123';
-        const farmUrl = `https://ro112.triburile.ro/game.php?village=${currentVillage}&screen=am_farm`;
+        const farmUrl = `https://ro116.triburile.ro/game.php?village=${currentVillage}&screen=am_farm`;
         farmWindow = window.open(farmUrl, '_blank');
     }
 
