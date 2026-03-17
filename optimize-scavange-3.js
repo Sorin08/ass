@@ -19,7 +19,7 @@ function main()
     else
     {
         var xhttp = new XMLHttpRequest();
-        xhttp.open("GET", `https://${game_data.world}.tribalwars.co.uk/interface.php?func=get_config`);
+        xhttp.open("GET", `/interface.php?func=get_config`);
         xhttp.onreadystatechange = function() {
             if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
                 let xmlDoc = (new DOMParser()).parseFromString(xhttp.responseText,"text/xml");
@@ -440,7 +440,7 @@ function sendScavRequests(){
             data += `&squad_requests%5B0%5D%5Bcandidate_squad%5D%5Bcarry_max%5D=${totalCapacity}&squad_requests%5B0%5D%5Boption_id%5D=${missionIdx+1}&squad_requests%5B0%5D%5Buse_premium%5D=false&h=${hash}`;
 
             var xhttp = new XMLHttpRequest();
-            xhttp.open("POST", `https://${world}.tribalwars.co.uk/game.php?village=${villageId}&screen=scavenge_api&ajaxaction=send_squads`);
+            xhttp.open("POST", `/game.php?village=${villageId}&screen=scavenge_api&ajaxaction=send_squads`);
             xhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
 
             xhttp.onreadystatechange = function() {
